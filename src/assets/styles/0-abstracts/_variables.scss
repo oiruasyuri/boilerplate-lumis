@@ -1,0 +1,40 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+
+// VARIABLES
+
+$grid-columns: 12;
+$grid-gutter: 48px;
+$grid-gutter-lg: 16px;
+$grid-margin: 24px;
+
+$width-xs: 320px;
+$width-sm: 480px;
+$width-md: 720px;
+$width-lg: 960px;
+$width-xl: 1200px;
+$width-hd: 1720px;
+$break-xss: 321px;
+$break-xs: 375px;
+$break-sm: 600px;
+$break-md: 740px;
+$break-lg: 980px;
+$break-xl: 1220px;
+$break-hd: 1740px;
+$min-sm: 'min-width: (#{$break-sm})';
+$min-md: 'min-width: (#{$break-md})';
+$min-lg: 'min-width: (#{$break-lg})';
+$min-xl: 'min-width: (#{$break-xl})';
+$min-hd: 'min-width: (#{$break-hd})';
+$max-xss: 'max-width: (#{$break-xss})';
+$max-xs: 'max-width: (#{$break-xs})';
+$max-sm: 'max-width: (#{$break-sm - 1px})';
+$max-md: 'max-width: (#{$break-md - 1px})';
+$max-lg: 'max-width: (#{$break-lg - 1px})';
+$max-xl: 'max-width: (#{$break-xl - 1px})';
+$max-hd: 'max-width: (#{$break-hd - 1px})';
+// $ie: (-ms-high-contrast: none), (-ms-high-contrast: active)
+
+//
+// COLORS

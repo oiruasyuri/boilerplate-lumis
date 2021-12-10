@@ -1,0 +1,16 @@
+@@include('../../partials/_head.html', {
+  title: 'Título da página',
+  description: 'Descrição da página'
+})
+
+<body>
+  @@include('../../partials/_header.html')
+
+  <main class="app__main">
+    @@include('./partials/_hero.html')
+  </main>
+
+  @@include('../../partials/_footer.html')
+  @@include('../../partials/_scripts.html')
+</body>
+</html>

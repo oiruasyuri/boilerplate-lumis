@@ -1,0 +1,332 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass mixins.
+// -----------------------------------------------------------------------------
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin unlist() {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: '';
+    visibility: hidden;
+    @include size(100%, 0);
+    clear: both;
+    display: block;
+  }
+}
+
+@mixin centralize($position: absolute) {
+  position: $position;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// grid_column
+// Uso: `grid_column($total, $margin, $count)`
+//
+// Cria uma nova coluna com largura definida.
+//
+// $total - Número total de colunas.
+// $margin - Largura (em porcentagem) das margens.
+// $count - Quantas colunas do total devem ser ocupadas.
+@mixin grid_column($total, $margin, $count) {
+  width: calc(((100% / #{$total}) * #{$count}) - (#{$margin} * 2));
+}
+
+// grid_column_pushed / pulled
+// Uso: `grid_column_pushed($total, $margin, $count)`
+//
+// Faz com que a coluna tenha um offset de `$count` colunas.
+//
+// $total - Número total de colunas.
+// $margin - Largura (em porcentagem) das margens.
+// $count - Quantas colunas do total devem ser ocupadas.
+@mixin grid_column_pushed($total, $margin, $count) {
+  margin-left: calc(((100% / #{$total}) * #{$count}) + #{$margin});
+}
+
+@mixin grid_column_pulled($total, $margin, $count) {
+  margin-right: calc(((100% / #{$total}) * #{$count}) + #{$margin});
+}
+
+// row
+// Uso: `row($autosize, $justify, $align)`
+//
+// Define uma linha, com largura máxima definida, que deve conter colunas.
+//
+// $autosize - Booleano (default:false) - Diz se as colunas filhas devem ter seu tamanho
+//             definido automaticamente.
+// $justify - flex-start (default) | flex-end | center | space-between | space-around | space-evenly
+// $align - stretch (default) | flex-start | flex-end | center | baseline
+@mixin row($autosize: false, $justify: flex-start, $align: stretch) {
+  width: 100%;
+  width: calc(100% - (2 * #{$grid-gutter}));
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: $justify;
+  align-items: $align;
+
+  @media screen and ($min-sm) {
+    width: $width-sm;
+  }
+
+  @media screen and ($min-md) {
+    width: $width-md;
+  }
+
+  @media screen and ($min-lg) {
+    width: $width-lg;
+    padding: 0 $grid-margin;
+  }
+
+  @media screen and ($min-xl) {
+    width: $width-xl;
+  }
+
+  @media screen and ($max-lg) {
+    width: calc(100% - (2 * #{$grid-gutter-lg}));
+  }
+
+  & > * {
+    flex: autosizeCell($autosize);
+  }
+}
+
+// row_row
+// Uso: `row_row($autosize, $justify, $align)`
+//
+// Dentro de uma coluna, define uma nova linha com colunas. Essa nova linha terá a largura máxima
+// da coluna à que pertence.
+//
+// $autosize - Booleano (default:false) - Diz se as colunas filhas devem ter seu tamanho
+//             definido automaticamente.
+// $justify - flex-start (default) | flex-end | center | space-between | space-around | space-evenly
+// $align - stretch (default) | flex-start | flex-end | center | baseline
+@mixin row_row($autosize: 0, $justify: flex-start, $align: stretch) {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: $justify;
+  align-items: $align;
+  $autosize: $autosize;
+  width: calc(100% + (2 * #{$grid-gutter}));
+  margin-left: -#{$grid-gutter};
+  margin-right: -#{$grid-gutter};
+  & > * {
+    flex: autosizeCell($autosize);
+  }
+}
+
+// row_fluid
+// Uso: `row_fluid($autosize, $justify, $align)`
+//
+// Define uma linha, sem largura máxima definida (fluída), que deve conter colunas.
+//
+// $autosize - Booleano (default:false) - Diz se as colunas filhas devem ter seu tamanho
+//             definido automaticamente.
+// $justify - flex-start (default) | flex-end | center | space-between | space-around | space-evenly
+// $align - stretch (default) | flex-start | flex-end | center | baseline
+@mixin row_fluid($autosize: false, $justify: flex-start, $align: stretch) {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: $justify;
+  align-items: $align;
+  & > * {
+    flex: autosizeCell($autosize);
+  }
+}
+
+@mixin grid_cell {
+  width: 100%;
+  width: calc(100% - (2 * #{$grid-gutter}));
+  margin-left: $grid-gutter;
+  margin-right: $grid-gutter;
+}
+
+@mixin grid_cell_padded {
+  box-sizing: content-box;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: $grid-gutter;
+  padding-right: $grid-gutter;
+}
+
+// !Small, 540 (max 740)
+@mixin cell_xs($count, $total: 0) {
+  @media screen and ($max-sm) {
+    @if $total==0 {
+      @include grid_column($grid-columns-sm, $grid-gutter, $count);
+    } @else {
+      @include grid_column($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin push_xs($count, $total: 0) {
+  @media screen and ($max-sm) {
+    @if $total==0 {
+      @include grid_column_pushed($grid-columns-sm, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pushed($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// !Min, 300 (max 500)
+@mixin cell_sm($count, $total: 0) {
+  @media screen and ($max-md) {
+    @if $total==0 {
+      @include grid_column($grid-columns-sm, $grid-gutter, $count);
+    } @else {
+      @include grid_column($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin push_sm($count, $total: 0) {
+  @media screen and ($max-md) {
+    @if $total==0 {
+      @include grid_column_pushed($grid-columns-sm, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pushed($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// !Medium, 6 column, 720 (min 740)
+@mixin cell_md($count, $total: 0) {
+  @media screen and ($min-md) and ($max-lg) {
+    @if $total==0 {
+      @include grid_column($grid-columns-md, $grid-gutter, $count);
+    } @else {
+      @include grid_column($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin push_md($count, $total: 0) {
+  @media screen and ($min-md) and ($max-lg) {
+    @if $total==0 {
+      @include grid_column_pushed($grid-columns-md, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pushed($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// !Large, 12 column, 960 (min 980)
+@mixin cell_lg($count, $total: 0) {
+  @media screen and ($min-lg) {
+    @if $total==0 {
+      @include grid_column($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin push_lg($count, $total: 0) {
+  @media screen and ($min-lg) {
+    @if $total==0 {
+      @include grid_column_pushed($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pushed($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// !XLarge, 12 column, 1200 (min 1220)
+@mixin cell_xl($count, $total: 0) {
+  @media screen and ($min-xl) {
+    @if $total==0 {
+      @include grid_column($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin push_xl($count, $total: 0) {
+  @media screen and ($min-xl) {
+    @if $total==0 {
+      @include grid_column_pushed($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pushed($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin pull_xl($count, $total: 0) {
+  @media screen and ($min-xl) {
+    @if $total==0 {
+      @include grid_column_pulled($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pulled($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// !XLarge, 12 column, 1200 (min 1220)
+@mixin cell_hd($count, $total: 0) {
+  @media screen and ($min-hd) {
+    @if $total==0 {
+      @include grid_column($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin push_hd($count, $total: 0) {
+  @media screen and ($min-hd) {
+    @if $total==0 {
+      @include grid_column_pushed($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pushed($total, $grid-gutter, $count);
+    }
+  }
+}
+
+// Push
+@mixin pull_hd($count, $total: 0) {
+  @media screen and ($min-hd) {
+    @if $total==0 {
+      @include grid_column_pulled($grid-columns-lg, $grid-gutter, $count);
+    } @else {
+      @include grid_column_pulled($total, $grid-gutter, $count);
+    }
+  }
+}
+
+@mixin flex($align: flex-start, $justify: flex-start) {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin limitTextLines($numberOfLines: 1) {
+  /*! autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $numberOfLines;
+}

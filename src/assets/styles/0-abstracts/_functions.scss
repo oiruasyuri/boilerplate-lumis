@@ -1,0 +1,26 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass functions.
+// -----------------------------------------------------------------------------
+
+// autosizeCell($autosize)
+//
+// Verifica se a propriedade *autosize* é verdadeira. Se for, retorna os valores para
+// permitir que a célula tenha uma largura automática.
+//
+// $autosize - Valor booleano para a propriedade.
+//
+// Styleguide Grids.Functions.Autosize
+@use 'sass:math';
+
+@function autosizeCell($autosize) {
+  @if $autosize==1 {
+    @return 1;
+  } @else {
+    @return 0 1 auto;
+  }
+}
+
+@function rem($pixels, $context: 16) {
+  // @return ($pixels / $context) * 1rem;
+  @return math.div($pixels, $context) * 1;
+}

@@ -1,0 +1,1 @@
+console.log('pages / home / home.js');
